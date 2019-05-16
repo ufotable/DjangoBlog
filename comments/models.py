@@ -1,4 +1,6 @@
 from django.db import models
+from django.shortcuts import render, reverse, redirect
+
 from django.contrib.auth.models import User
 from datetime import datetime
 from blog.models import Post
@@ -23,7 +25,7 @@ class Comment(models.Model):
     def move_to_trash(self):
         self.delete()
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, post_id):
         return reverse('blog:post_details', args=(post_id, ))
 
     def __str__(self):
@@ -38,4 +40,4 @@ class Reply(models.Model):
     published_date = models.DateTimeField(default=datetime.now(), blank=True)
 
     def __str__(self):
-        return self.title
+        return self.comment.post.title

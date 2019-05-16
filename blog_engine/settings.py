@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'collect_static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -30,7 +30,7 @@ SECRET_KEY = '19jw%v0_745h+0w$0nh1#n$s5d*5a4#7h733%!1rw2@t1s3byb'
 
 # whene Turning off debug, that's mean ( DEBUG = False ) will show us what a live site would show , just for check it's work.
 
-DEBUG = False
+DEBUG = True
 
 # and ALLOWED_HOSTS restricts which HTTP requests Django will respond to so the URL needs to be explicitly added.
 
@@ -38,7 +38,7 @@ if DEBUG is False:
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 if DEBUG is True:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -94,13 +94,16 @@ WSGI_APPLICATION = 'blog_engine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
+else:
+    from .database_settings import DATABASES
+    DATABASES = DATABASES
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -134,22 +137,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'zh-hans'
+TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
-
 USE_L10N = True
-
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 STATICFILES_DIRS = [
     STATIC_DIR,
@@ -161,3 +159,5 @@ MEDIA_URL ='/media/'
 
 #login url
 LOGIN_URL = '/blog/user_login'
+
+MIDDLEWARE.append('blog_engine.MiddleWare.SiteMainMiddleware')

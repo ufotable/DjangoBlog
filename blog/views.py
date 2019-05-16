@@ -50,12 +50,11 @@ def post_details(request, pk):
     post_id = post.id
     comments = post.comments.filter(is_approved=True)
 
-
-
     my_dict = {
         'post_tags': post_tags,
         'post_categories': post_categories,
         'post': post,
+        'post_id': post_id,
         'comments': comments,
         'next_post': next_post,
         'previous_post': previous_post
@@ -135,16 +134,19 @@ def archeive_posts_by_date(request, year, month, day):
 
 #Search Result
 def search_view(request):
-        if request.method == 'GET' :
-            search_query = request.GET.get('search_box')
-            tag_list = Tag.objects.filter(text__contains=search_query)
-            cat_list = Category.objects.filter(text__contains=search_query)
-            post_list = Post.objects.filter(title__contains=search_query ).distinct() | Post.objects.filter(content__contains=search_query ).distinct() | Post.objects.filter(tag__id__in=tag_list).distinct() | Post.objects.filter(category__id__in=cat_list).distinct()
+    if request.method == 'GET' :
+        search_query = request.GET.get('search_box')
+        tag_list = Tag.objects.filter(text__contains=search_query)
+        cat_list = Category.objects.filter(text__contains=search_query)
+        post_list = Post.objects.filter(title__contains=search_query ).distinct() | Post.objects.filter(content__contains=search_query ).distinct() | Post.objects.filter(tag__id__in=tag_list).distinct() | Post.objects.filter(category__id__in=cat_list).distinct()
 
-        paginator = Paginator(post_list, 5) # Show 5 posts per page
-        page = request.GET.get('page')
-        posts = paginator.get_page(page)
+    paginator = Paginator(post_list, 5) # Show 5 posts per page
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
 
-        context = {'posts':posts}
+    context = {'posts':posts}
 
-        return render(request, 'blog/archeive.html', context)
+    return render(request, 'blog/archeive.html', context)
+
+
+from comments.views import submit_comment, submit_reply

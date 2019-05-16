@@ -1,7 +1,8 @@
-from django.db import models
-from django.contrib.auth.models import User
 from datetime import datetime
 
+from django.db import models
+from django.contrib.auth.models import User
+from django.shortcuts import render, reverse, redirect
 # Create your models here.
 
 # Post Taxonomy:Category
@@ -42,7 +43,7 @@ class Post(models.Model):
     def approved_comments(self):
         return self.comments.filter(is_approved = True)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, post_id):
         return reverse('blog:post_details', args=(post_id, ))
 
     def __str__(self):

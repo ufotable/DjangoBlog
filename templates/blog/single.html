@@ -21,15 +21,15 @@
        <ul class="pager">
 
           {% if previous_post %}
-          <li style="margin-left:0"><a href="/blog/posts/{{previous_post.id}}">Previous Post</a></li>
+          <li style="margin-left:0"><a href="/blog/posts/{{previous_post.id}}"> 上一篇 </a></li>
           {% endif%}
 
           {% if next_post %}
-          <li style="float: right"><a href="/blog/posts/{{next_post.id}}">Next Post</a></li>
+          <li style="float: right"><a href="/blog/posts/{{next_post.id}}">下一篇</a></li>
           {% endif %}
         </ul>
 
-        <p><b>Categories:</b>
+        <p><b>分类:</b>
         {% for category in post_categories %}
         {% if forloop.last %}
         <a href="/blog/category/{{ category.text }}" />{{ category.text }}</a>
@@ -38,7 +38,7 @@
         {% endif %}
         {% endfor %}
         </p>
-        <p><b>Tags:</b>
+        <p><b>标签:</b>
         {% for tag in post_tags %}
         {% if forloop.last %}
         <a href="/blog/tag/{{ tag.text }}" />{{ tag.text }}</a>
@@ -50,13 +50,11 @@
 
 
 
-      <div id="share">Share This Post</div>
-
-
+      <div id="share">分享这条评论</div>
         <div class="card">
 
             <div class="card-header">
-                    Leave a Comment:
+                发表一条评论:
             </div>
             <div class="card-body">
 
@@ -81,11 +79,12 @@
                 <div class="form-group">
 
                   <input type="hidden" name='post_id' value="{{post.id}}">
-                    <textarea class="form-control" id="comment-box" rows="3" name="comment_content"></textarea>
+                    <textarea class="form-control" id="comment-box11" rows="3" name="comment_content"></textarea>
 
                 </div>
 
-                <button type="submit" class="btn btn-primary" onclick="login_alert()">Submit</button> <!-- have to work here -->
+
+                <button type="submit" class="btn btn-primary" onclick="login_alert()">发表</button> <!-- have to work here -->
               </form>
 
             {% endif %}
@@ -96,13 +95,12 @@
 
         <div class="row comment">
 
-
-
-
         {% if comments %}
           {% for comment in comments %}
-          <div class="col-md-1 commenter"><img src="/media/{{comment.author.profile_pic}}" alt="50x50"></div>
+          <div class="col-md-1 commenter"><img src="/media/{{comment.author.profile_pic}}" alt="50x50">
+          </div>
           <div class="col-md-10 comment-body">
+
               <h2 style="font-size: 20px">{{comment.author.user}}</h2>
               <p>{{comment.content}}</p>
               {% if comment.replies.all %}
@@ -125,10 +123,10 @@
 
                               <input type="hidden" name='post_id' value="{{comment.post.id}}">
                               <input type="hidden" name='comment_id' value="{{comment.id}}">
-                                <textarea class="form-control" id="comment-box" rows="3" name="reply_content"></textarea>
+                                <textarea class="form-control" id="comment-box1" rows="3" name="reply_content"></textarea>
 
                             </div>
-                            <button type="submit" class="btn btn-primary">Reply</button>
+                            <button type="submit" class="btn btn-primary">回复</button>
                           </form>
                           {% else %}
                           <form action="#" method="POST">
@@ -136,10 +134,10 @@
 
                               <div class="form-group">
 
-                                <textarea class="form-control" id="comment-box" rows="3" name="reply_content"></textarea>
+                                <textarea class="form-control" id="comment-box2" rows="3" name="reply_content"></textarea>
 
                               </div>
-                              <button type="submit" class="btn btn-primary" onclick="login_alert()">Reply</button>
+                              <button type="submit" class="btn btn-primary" onclick="login_alert()">回复</button>
                             </form>
 
                           {% endif %}
@@ -147,13 +145,12 @@
                         {% endif %}
                     </div>
 
-
                 </div>
                 {% endfor %}
 
 
               {% else %}
-                <button type="button" class="btn reply">Reply</button>
+                <button type="button" class="btn reply">回复</button>
                 {% if user.is_authenticated %}
                 <form class="reply-form" action="{% url 'blog:submit_reply'%}" method="POST">
                   {% csrf_token %}
@@ -163,11 +160,11 @@
 
                       <input type="hidden" name='post_id' value="{{comment.post.id}}">
                       <input type="hidden" name='comment_id' value="{{comment.id}}">
-                        <textarea class="form-control" id="comment-box" rows="3" name="reply_content"></textarea>
+                        <textarea class="form-control" id="comment-box3" rows="3" name="reply_content"></textarea>
 
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Reply</button>
+                    <button type="submit" class="btn btn-primary">回复</button>
                     {% else %} <!-- have to work here -->
                     <form class="reply-form" action="#" method="POST">
                       {% csrf_token %}
@@ -177,32 +174,25 @@
 
                           <input type="hidden" name='post_id' value="{{comment.post.id}}">
                           <input type="hidden" name='comment_id' value="{{comment.id}}">
-                            <textarea class="form-control" id="comment-box" rows="3" name="reply_content"></textarea>
+                            <textarea class="form-control" id="comment-box4" rows="3" name="reply_content"></textarea>
 
                         </div>
 
-                    <button type="submit" class="btn btn-primary" onclick="login_alert()">Reply</button>
+                    <button type="submit" class="btn btn-primary" onclick="login_alert()">回复</button>
+                    </form>
                     {% endif %}
                   </form>
               {% endif %}
 
 
-
           </div>
-
           {% endfor %}
-      
         {% endif %}
 
-
-      </div>
     </div>
     {% else %}
     <p>Post Has been deleted OR 404!!!!</p>
     {% endif %}
-
-
-
-
+</div>
 </div>
 {% endblock %}

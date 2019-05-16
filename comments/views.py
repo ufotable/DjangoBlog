@@ -1,5 +1,14 @@
-from django.shortcuts import render
+from datetime import datetime
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
+
+from django.shortcuts import render, reverse, redirect
 from .models import Comment,Reply
+
+from accounts.models import UserProfileInfo
+from blog.models import Post
+
 
 # Create your views here.
 #Comment submission by logged in user
@@ -7,7 +16,6 @@ from .models import Comment,Reply
 def submit_comment(request):
 
     if request.method == 'POST' :
-
         comment_title = request.POST.get('comment_title')
         comment_content = request.POST.get('comment_content')
         post_id = request.POST.get('post_id')
@@ -21,7 +29,7 @@ def submit_comment(request):
         c.published_date = datetime.now()
         c.save()
 
-    return HttpResponseRedirect(reverse('blog:post_details', args=(post_id, )))
+        return HttpResponseRedirect( c.get_absolute_url(post_id) )
 
 #Reply submission by logged in user
 @login_required
@@ -42,4 +50,4 @@ def submit_reply(request):
         r.published_date = datetime.now()
         r.save()
 
-    return HttpResponseRedirect(reverse('blog:post_details', args=(post_id, ))) # have to work here
+        return HttpResponseRedirect(reverse('blog:post_details', args=(post_id, ))) # have to work here
